@@ -104,13 +104,15 @@ public class Grille {
 		System.out.println("Le bateau est vertical : "+b.getOrientation());
 		if (b.getOrientation()) {
 			for (int i=(l-1);i<(l-1)+b.getTaille();i++) {
-				this.grille[i][c] = true;
-				System.out.println("Case placée en "+intToChar(i+1)+c);
+				this.grille[i][c-1] = true;
+				this.afficherGrille();
+				System.out.println("Case placée en "+intToChar(i)+","+c);
 			}
 		} else {
 			for (int i=(c-1);i<(c-1)+b.getTaille();i++) {
-				this.grille[l][i] = true;
-				System.out.println("Case placée en "+intToChar(l)+(i+1));
+				this.grille[l-1][i] = true;
+				this.afficherGrille();
+				System.out.println("Case placée en "+intToChar(l)+","+(i+1));
 			}
 		}
 	}
