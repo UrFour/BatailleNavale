@@ -11,9 +11,7 @@ public class Bateau {
 		this.nom = nom;
 		this.taille = taille;
 		this.etat = new boolean[taille];
-		for (int i=0;i<taille;i++) {
-			this.etat[i] = false;
-		} this.estVertical = estVertical;
+		this.estVertical = estVertical;
 		this.joueur = joueur;
 		this.ligne = ligne;
 		this.colonne = colonne;

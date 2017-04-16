@@ -42,18 +42,15 @@ public class Grille {
 				if (placement.charAt(1) == '1' && placement.length() > 2) c=10; // cas particulier dans le cas où il y a plus de deux chiffres (pour le 10)
 				else {
 					c = Integer.parseInt(placement.replaceAll("\\D", "")); // permet d'extraire tous les chiffres d'une chaîne de caractères
-				}
-				System.out.println(""+l+""+c);
-				System.out.println("Voulez-vous le placer à l'horizontale ou à la verticale ? (H/V)"); // on choisit l'orientation du bateau
+				} System.out.println("Voulez-vous le placer à l'horizontale ou à la verticale ? (H/V)"); // on choisit l'orientation du bateau
 				placement = sc.nextLine();
 				if (placement.charAt(0) == 'H') {
 					estVertical = false;
 				} else {
 					estVertical = true;
 				} bateauPosable = this.bateauPosable(l, c, i, estVertical);
-				System.out.println(bateauPosable);
 			} this.bateaux[joueur-1][i] = new Bateau(nomBateau(i+1), i+1, estVertical, joueur, l, c);
-			System.out.println(this.bateaux[joueur-1][i]);
+			//System.out.println(this.bateaux[joueur-1][i].toString());
 			this.placerBateau(l, c, this.bateaux[joueur-1][i]);
 			bateauPosable = false;
 		} System.out.println("Les bâteaux ont été définis."); // les bâteaux sont stockés dans un tableau 2D de bâteaux pour faciliter la vie
@@ -82,17 +79,17 @@ public class Grille {
 	
 	public boolean bateauPosable(int l, int c, int taille, boolean estVertical) {
 		boolean bateauPosable = true;
-		if ((l+taille>10) || (c+taille>10)) {
+		if ((l+taille>10 && !estVertical) || (c+taille>10 && estVertical)) {
 			bateauPosable = false;
 		} if (estVertical) {
-			for (int i=l-1;i<taille+l-1;i++) {
-				if (grille[i][c]) {
+			for (int i=(c-1);i<taille+(c-1);i++) {
+				if (grille[i][l-1]) {
 					bateauPosable = false;
 				}
 			}
-		} else if (!estVertical){
-			for (int i=c-1;i<taille+c-1;i++) {
-				if (grille[l][i]) {
+		} else {
+			for (int i=(l-1);i<taille+(l-1);i++) {
+				if (grille[c-1][i]) {
 					bateauPosable = false;
 				}
 			}
@@ -101,18 +98,13 @@ public class Grille {
 	}
 	
 	public void placerBateau(int l, int c, Bateau b) {
-		System.out.println("Le bateau est vertical : "+b.getOrientation());
 		if (b.getOrientation()) {
-			for (int i=(l-1);i<(l-1)+b.getTaille();i++) {
-				this.grille[i][c-1] = true;
-				this.afficherGrille();
-				System.out.println("Case placée en "+intToChar(i)+","+c);
+			for (int i=(c-1);i<(c-1)+b.getTaille();i++) {
+				this.grille[i][l-1] = true;
 			}
 		} else {
-			for (int i=(c-1);i<(c-1)+b.getTaille();i++) {
-				this.grille[l-1][i] = true;
-				this.afficherGrille();
-				System.out.println("Case placée en "+intToChar(l)+","+(i+1));
+			for (int i=(l-1);i<(l-1)+b.getTaille();i++) {
+				this.grille[c-1][i] = true;
 			}
 		}
 	}
@@ -142,7 +134,4 @@ public class Grille {
 			 System.out.print("-");
 		 } System.out.println("+");
 	}
-	
-	
-
 }
