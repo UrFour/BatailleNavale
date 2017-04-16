@@ -1,16 +1,14 @@
 import java.util.Scanner;
 
 public class Grille {
-	private int lignes;
-	private int colonnes;
+	private int taille;
 	private boolean[][]	grille;
 	private int nbrBateaux;
 	private Bateau[][] bateaux;
 	
 	public Grille() {
-		this.lignes = 10;
-		this.colonnes = 10;
-		this.grille = new boolean[this.lignes][this.colonnes];
+		this.taille = 10;
+		this.grille = new boolean[this.taille][this.taille];
 		this.nbrBateaux = 5;
 		this.bateaux = new Bateau[2][this.nbrBateaux];
 	}
@@ -40,21 +38,24 @@ public class Grille {
 						}
 					}
 				} entreeCorrecte = false;
-				c = placement.charAt(0) - 'A' + 1; // conversion d'une lettre en chiffre (A donne 1, B donne 2, etc...)
-				if (placement.length()>2) l=10; // cas particulier dans le cas où il y a plus de deux chiffres (pour le 10)
-				else l = Character.getNumericValue(placement.charAt(1));
+				l = placement.charAt(0) - 'A' + 1; // conversion d'une lettre en chiffre (A donne 1, B donne 2, etc...)
+				if (placement.charAt(1) == '1' && placement.length() > 2) c=10; // cas particulier dans le cas où il y a plus de deux chiffres (pour le 10)
+				else {
+					c = Integer.parseInt(placement.replaceAll("\\D", "")); // permet d'extraire tous les chiffres d'une chaîne de caractères
+				}
 				System.out.println(""+l+""+c);
 				System.out.println("Voulez-vous le placer à l'horizontale ou à la verticale ? (H/V)"); // on choisit l'orientation du bateau
 				placement = sc.nextLine();
 				if (placement.charAt(0) == 'H') {
 					estVertical = false;
-				} else if (placement.charAt(0) == 'V') {
+				} else {
 					estVertical = true;
 				} bateauPosable = this.bateauPosable(l, c, i, estVertical);
-			} this.bateaux[joueur-1][i] = new Bateau(nomBateau(i+1), i, estVertical, joueur, l, c);
+				System.out.println(bateauPosable);
+			} this.bateaux[joueur-1][i] = new Bateau(nomBateau(i+1), i+1, estVertical, joueur, l, c);
+			System.out.println(this.bateaux[joueur-1][i]);
 			this.placerBateau(l, c, this.bateaux[joueur-1][i]);
 			bateauPosable = false;
-			placement = "";
 		} System.out.println("Les bâteaux ont été définis."); // les bâteaux sont stockés dans un tableau 2D de bâteaux pour faciliter la vie
 	}
 	
@@ -84,13 +85,13 @@ public class Grille {
 		if ((l+taille>10) || (c+taille>10)) {
 			bateauPosable = false;
 		} if (estVertical) {
-			for (int i=l-1;i<taille+l;i++) {
+			for (int i=l-1;i<taille+l-1;i++) {
 				if (grille[i][c]) {
 					bateauPosable = false;
 				}
 			}
 		} else if (!estVertical){
-			for (int i=c-1;i<taille+c;i++) {
+			for (int i=c-1;i<taille+c-1;i++) {
 				if (grille[l][i]) {
 					bateauPosable = false;
 				}
@@ -100,15 +101,16 @@ public class Grille {
 	}
 	
 	public void placerBateau(int l, int c, Bateau b) {
+		System.out.println("Le bateau est vertical : "+b.getOrientation());
 		if (b.getOrientation()) {
-			for (int i=l+1;i<l+b.getTaille()-1;i++) {
-				this.grille[i-1][c-1] = true;
-				System.out.println("Le "+nomBateau(b.getTaille())+" a bien été placé en "+intToChar(c).charAt(0)+""+i+".");
-			}	
+			for (int i=(l-1);i<(l-1)+b.getTaille();i++) {
+				this.grille[i][c] = true;
+				System.out.println("Case placée en "+intToChar(i+1)+c);
+			}
 		} else {
-			for (int i=c+1;i<c+b.getTaille()-1;i++) {
-				this.grille[l-1][i-1] = true;
-				System.out.println("Le "+nomBateau(b.getTaille())+" a bien été placé en "+intToChar(i).charAt(0)+""+l+".");
+			for (int i=(c-1);i<(c-1)+b.getTaille();i++) {
+				this.grille[l][i] = true;
+				System.out.println("Case placée en "+intToChar(l)+(i+1));
 			}
 		}
 	}

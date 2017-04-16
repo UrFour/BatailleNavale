@@ -59,7 +59,11 @@ public class Bateau {
 	}
 	
 	public String toString() {
-		return "Le bateau est un "+this.nom+" de taille "+this.taille+" avec "+this.casesTouchees();
+		String toReturn =  "Le bateau est un "+this.nom+" de taille "+this.taille+", placé";
+		if (this.estVertical) toReturn += " verticalement";
+		else toReturn += " horizontalement";
+		toReturn += ", avec "+this.casesTouchees()+" cases touchées. Il est situé en "+(char)(this.ligne + (int)'A' - 1)+this.colonne+" et appartient au joueur "+joueur+".";
+		return toReturn;
 	}
 
 }
