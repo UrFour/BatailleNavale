@@ -41,7 +41,6 @@ class Panel extends JPanel {
 	    }
 	    g.dispose();
 	    
-	    
 	}
 	
 	public String intToChar(int valeur) {

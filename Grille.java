@@ -1,29 +1,36 @@
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Scanner;
 
-public class Grille {
+public class Grille implements Serializable {
 	private int taille;
-	private boolean[][]	grille;
+	private char[][] grille;
 	private int nbrBateaux;
 	private Bateau[][] bateaux;
+	private int joueur;
 	
-	public Grille() {
-		this.taille = 10;
-		this.grille = new boolean[this.taille][this.taille];
-		this.nbrBateaux = 5;
-		this.bateaux = new Bateau[2][this.nbrBateaux];
+	public Grille(int taille, char[][] grille, int nbrBateaux, Bateau[][] bateaux, int joueur) {
+		this.taille = taille;
+		this.grille = grille;
+		this.nbrBateaux = nbrBateaux;
+		this.bateaux = bateaux;
+		this.joueur = joueur;
 	}
+		
 	
-	public void definitionBateau(int joueur) {
+	public Grille definitionBateau(int joueur) {
 		Scanner sc = new Scanner(System.in);
+		Grille grille = new Grille(10, new char[10][10], 5, new Bateau[2][5], joueur);
 		// Définition de toutes les variables nécessaires
 		int l = 0; 
 		int c = 0; 
 		boolean entreeCorrecte = false; 
 		boolean bateauPosable = false; 
 		boolean estVertical = false; 
-		String placement = ""; 
+		String placement = "";
 		
-		System.out.println("Définition des bateaux du joueur "+joueur+".");
+		System.out.println("Définition des bateaux du joueur "+grille.joueur+".");
 		/* Boucle pour initialiser les 5 bateaux du joueur (on peut techniquement en rajouter plus mais il faut ajouter
 		 * le nom des bateaux correspondants aux différentes tailles dans la fonction en-dessous
 		 */
@@ -48,12 +55,11 @@ public class Grille {
 					estVertical = false;
 				} else {
 					estVertical = true;
-				} bateauPosable = this.bateauPosable(l, c, i, estVertical);
-			} this.bateaux[joueur-1][i] = new Bateau(nomBateau(i+1), i+1, estVertical, joueur, l, c);
-			//System.out.println(this.bateaux[joueur-1][i].toString());
-			this.placerBateau(l, c, this.bateaux[joueur-1][i]);
+				} bateauPosable = grille.bateauPosable(l, c, i, estVertical);
+			} grille.bateaux[grille.joueur-1][i] = new Bateau(nomBateau(i+1), i+1, new boolean[i+1], estVertical, grille.joueur, l, c);
+			grille.placerBateau(l, c, grille.bateaux[grille.joueur-1][i]);
 			bateauPosable = false;
-		} System.out.println("Les bâteaux ont été définis."); // les bâteaux sont stockés dans un tableau 2D de bâteaux pour faciliter la vie
+		} return grille;
 	}
 	
 	public String nomBateau(int taille) {
@@ -83,13 +89,13 @@ public class Grille {
 			bateauPosable = false;
 		} if (estVertical) {
 			for (int i=(c-1);i<taille+(c-1);i++) {
-				if (grille[i][l-1]) {
+				if (grille[i][l-1] == 'X') {
 					bateauPosable = false;
 				}
 			}
 		} else {
 			for (int i=(l-1);i<taille+(l-1);i++) {
-				if (grille[c-1][i]) {
+				if (grille[c-1][i] == 'X') {
 					bateauPosable = false;
 				}
 			}
@@ -100,13 +106,13 @@ public class Grille {
 	public void placerBateau(int l, int c, Bateau b) {
 		if (b.getOrientation()) {
 			for (int i=(c-1);i<(c-1)+b.getTaille();i++) {
-				this.grille[i][l-1] = true;
+				this.grille[i][l-1] = 'X';
 			}
 		} else {
 			for (int i=(l-1);i<(l-1)+b.getTaille();i++) {
-				this.grille[c-1][i] = true;
+				this.grille[c-1][i] = 'X';
 			}
-		}
+		} this.afficherGrille();
 	}
 	
 	public String intToChar(int valeur) {
@@ -122,8 +128,8 @@ public class Grille {
 		 for (int i=0;i<this.grille.length;i++) {
 			 System.out.print("|");
 			 for (int j=0;j<this.grille[0].length;j++) {
-				 if (this.grille[i][j]) {
-					 System.out.print("X");
+				 if (this.grille[i][j] == 'X' || this.grille[i][j] == '.') {
+					 System.out.print(this.grille[i][j]);
 				 } else {
 					 System.out.print(" ");
 				 }
@@ -133,5 +139,9 @@ public class Grille {
 		 for (int j=0;j<this.grille[0].length;j++) {
 			 System.out.print("-");
 		 } System.out.println("+");
+	}
+	
+	public int getJoueur() {
+		return this.joueur;
 	}
 }

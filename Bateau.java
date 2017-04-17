@@ -1,4 +1,6 @@
-public class Bateau {
+import java.io.Serializable;
+
+public class Bateau implements Serializable{
 	private String nom;
 	private int taille;
 	private boolean[] etat;
@@ -7,10 +9,10 @@ public class Bateau {
 	private int ligne;
 	private int colonne;
 	
-	public Bateau(String nom, int taille, boolean estVertical, int joueur, int ligne, int colonne) {
+	public Bateau(String nom, int taille, boolean[] etat, boolean estVertical, int joueur, int ligne, int colonne) {
 		this.nom = nom;
 		this.taille = taille;
-		this.etat = new boolean[taille];
+		this.etat = etat;
 		this.estVertical = estVertical;
 		this.joueur = joueur;
 		this.ligne = ligne;
