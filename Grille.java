@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Grille implements Serializable {
 	private int taille;
-	private char[][] grille;
+	public char[][] grille;
 	private int nbrBateaux;
 	private Bateau[][] bateaux;
 	private int joueur;
@@ -153,5 +153,13 @@ public class Grille implements Serializable {
 	
 	public int getJoueur() {
 		return this.joueur;
+	}
+	
+	public boolean bateauPresent(int ligne, int colonne) {
+		if (grille[ligne][colonne] == 'X') {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

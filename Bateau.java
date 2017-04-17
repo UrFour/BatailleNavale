@@ -36,6 +36,10 @@ public class Bateau implements Serializable{
 		return toReturn;
 	}
 	
+	public boolean[] getEtat() {
+		return this.etat;
+	}
+	
 	public void setEtat(int indice) {
 		this.etat[indice] = true;
 	}

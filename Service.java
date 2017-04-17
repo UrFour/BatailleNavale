@@ -37,7 +37,7 @@ public class Service extends Thread {
 					grille1.afficherGrille();
 				} if (numClient == 2) {
 					grille2 = (Grille) ois.readObject();
-					System.out.println("Grille du joueur 2:");
+					System.out.println("Grille du joueur 2:" );
 					grille2.afficherGrille();
 				} if(!ServeurMultiThreads.fin) {
 				// déroulement du jeu
