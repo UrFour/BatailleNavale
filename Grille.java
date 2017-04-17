@@ -112,7 +112,8 @@ public class Grille implements Serializable {
 			for (int i=(l-1);i<(l-1)+b.getTaille();i++) {
 				this.grille[c-1][i] = 'X';
 			}
-		} this.afficherGrille();
+		} System.out.println("Emplacement des bateaux actuels :");
+		this.afficherGrille();
 	}
 	
 	public String intToChar(int valeur) {
@@ -121,21 +122,30 @@ public class Grille implements Serializable {
 	}
 	
 	public void afficherGrille() {
-		 System.out.print("+");
-		 for (int j=0;j<this.grille[0].length;j++) {
-			 System.out.print("-");
-		 } System.out.println("+");
-		 for (int i=0;i<this.grille.length;i++) {
-			 System.out.print("|");
+		System.out.print("    ");
+		for (int i=1;i<=this.grille.length;i++) {
+			System.out.print(intToChar(i));
+		} System.out.println();
+		System.out.print("   +");
+		for (int j=0;j<this.grille[0].length;j++) {
+			System.out.print("-");
+		} System.out.println("+");
+		for (int i=0;i<this.grille.length;i++) {
+			 if (i == 9) {
+				 System.out.print(i+1+" ");
+			 } else {
+				 System.out.print(i+1+"  ");
+			 } System.out.print("|");
 			 for (int j=0;j<this.grille[0].length;j++) {
 				 if (this.grille[i][j] == 'X' || this.grille[i][j] == '.') {
 					 System.out.print(this.grille[i][j]);
 				 } else {
 					 System.out.print(" ");
 				 }
-			 } System.out.println("|");
+			 } System.out.println("| ");
+			 //System.out.println(intToChar(i+1));
 		 }
-		 System.out.print("+");
+		 System.out.print("   +");
 		 for (int j=0;j<this.grille[0].length;j++) {
 			 System.out.print("-");
 		 } System.out.println("+");
