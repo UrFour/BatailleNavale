@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Grille implements Serializable {
 	private int taille;
-	public char[][] grille;
+	private char[][] grille;
 	private int nbrBateaux;
 	private Bateau[][] bateaux;
 	private int joueur;
@@ -56,7 +56,7 @@ public class Grille implements Serializable {
 				} else {
 					estVertical = true;
 				} bateauPosable = grille.bateauPosable(l, c, i, estVertical);
-			} grille.bateaux[grille.joueur-1][i] = new Bateau(nomBateau(i+1), i+1, new boolean[i+1], estVertical, grille.joueur, l, c);
+			} grille.bateaux[grille.joueur-1][i] = new Bateau(nomBateau(i+1), i+1, new boolean[i+1], estVertical, l-1, c-1);
 			grille.placerBateau(l, c, grille.bateaux[grille.joueur-1][i]);
 			bateauPosable = false;
 		} return grille;
@@ -143,7 +143,6 @@ public class Grille implements Serializable {
 					 System.out.print(" ");
 				 }
 			 } System.out.println("| ");
-			 //System.out.println(intToChar(i+1));
 		 }
 		 System.out.print("   +");
 		 for (int j=0;j<this.grille[0].length;j++) {
@@ -155,11 +154,15 @@ public class Grille implements Serializable {
 		return this.joueur;
 	}
 	
-	public boolean bateauPresent(int ligne, int colonne) {
-		if (grille[ligne][colonne] == 'X') {
-			return true;
-		} else {
-			return false;
-		}
+	public char[][] getGrille() {
+		return this.grille;
+	}
+	
+	public Bateau[][] getBateaux() {
+		return this.bateaux;
+	}
+	
+	public void setGrille(int ligne, int colonne, char etat) {
+		this.grille[ligne][colonne] = etat;
 	}
 }

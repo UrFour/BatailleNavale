@@ -5,16 +5,14 @@ public class Bateau implements Serializable{
 	private int taille;
 	private boolean[] etat;
 	private boolean estVertical;
-	private int joueur;
 	private int ligne;
 	private int colonne;
 	
-	public Bateau(String nom, int taille, boolean[] etat, boolean estVertical, int joueur, int ligne, int colonne) {
+	public Bateau(String nom, int taille, boolean[] etat, boolean estVertical, int ligne, int colonne) {
 		this.nom = nom;
 		this.taille = taille;
 		this.etat = etat;
 		this.estVertical = estVertical;
-		this.joueur = joueur;
 		this.ligne = ligne;
 		this.colonne = colonne;
 	}
@@ -25,10 +23,6 @@ public class Bateau implements Serializable{
 	
 	public boolean getOrientation() {
 		return this.estVertical;
-	}
-	
-	public int getJoueur() {
-		return this.joueur;
 	}
 	
 	public String getPosition() {
@@ -66,7 +60,7 @@ public class Bateau implements Serializable{
 		String toReturn =  "Le bateau est un "+this.nom+" de taille "+this.taille+", placé";
 		if (this.estVertical) toReturn += " verticalement";
 		else toReturn += " horizontalement";
-		toReturn += ", avec "+this.casesTouchees()+" cases touchées. Il est situé en "+(char)(this.ligne + (int)'A' - 1)+this.colonne+" et appartient au joueur "+joueur+".";
+		toReturn += ", avec "+this.casesTouchees()+" cases touchées. Il est situé en "+(char)(this.ligne + (int)'A' - 1)+this.colonne+".";
 		return toReturn;
 	}
 

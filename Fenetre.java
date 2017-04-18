@@ -1,4 +1,5 @@
 import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -60,15 +61,27 @@ class Panneau extends JPanel {
 	        }
 	    } Graphics2D g2d = (Graphics2D)g;
 	    g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
-	    for (int i = 0; i<maGrille.grille.length;i++) {
-	    	for (int j = 0; j<maGrille.grille[0].length;j++) {
-	            /*if (grille.getGrille()[i][j] == 'X') {
-	            	g.setColor(Color.BLUE);
-	            	g.drawRect((i*taille_carre)/2, j*taille_carre, taille_carre, taille_carre);
-	            } */
-	    		System.out.println(maGrille.grille[i][j]);
+	    BasicStroke ligne = new BasicStroke(3.0f);
+	    for (int i = 0; i<10;i++) {
+	    	for (int j = 0; j<10;j++) {
+	            if (maGrille.getGrille()[i][j] == 'X') {
+	            	g2d.setStroke(ligne);
+	            	g2d.setColor(Color.BLUE);
+	            	g2d.drawRect(j*taille_carre, i*taille_carre, taille_carre, taille_carre);
+	            	g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+	            	g2d.fillRect(j*taille_carre, i*taille_carre, taille_carre, taille_carre);
+	            } else if (maGrille.getGrille()[i][j] == '*') {
+	            	g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+	            	g2d.setColor(Color.RED);
+	            	g2d.setStroke(ligne);
+	            	g2d.drawLine(j*taille_carre, i*taille_carre, (j+1)*taille_carre, (i+1)*taille_carre);
+	            	g2d.drawLine((j+1)*taille_carre, i*taille_carre, j*taille_carre, (i+1)*taille_carre);
+	            } else if (maGrille.getGrille()[i][j] == '.') {
+	            	g2d.setColor(Color.BLACK);
+	            	g2d.fillOval(j*taille_carre+(taille_carre/2)-10, i*taille_carre+(taille_carre/2)-10, taille_carre/3, taille_carre/3);
+	            }
 	    	}
-	    }
+	    } g.dispose();
 	    /*g.setColor(Color.BLUE);
 	    g.fillRect(0, 0, 60, 60);
 	    g.fillRect(60, 0, 60, 60);
