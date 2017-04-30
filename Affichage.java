@@ -14,9 +14,9 @@ public class Affichage extends JFrame {
 	private Grille grille1;
 	private Grille grille2;
 	
-	public Affichage(Grille grille1, Grille grille2) {
-		this.grille1 = grille1;
-		this.grille2 = grille2;
+	public Affichage(Grille grille) {
+		this.grille1 = grille;
+		this.grille2 = new Grille(10, new char[10][10], 5, new Bateau[2][5], 2);
 		this.fenetre.setTitle("Bataille navale");
 		this.fenetre.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		//this.fenetre.setResizable(false);
@@ -40,6 +40,8 @@ public class Affichage extends JFrame {
 		private JLabel[] colonnes;
 		private Grille grille;
 		public Onglet(int numGrille, Grille grille) {
+			boolean definitionBateau = true;
+			int compteur = 0;
 			this.boutons = new JButton[10][10];
 			this.lignes = new JLabel[11];
 			this.colonnes = new JLabel[11];
@@ -78,7 +80,7 @@ public class Affichage extends JFrame {
 			for (int i=0;i<10;i++) {
 				for (int j=0;j<10;j++) {
 					if (grille.getGrille()[i][j] == 'X') {
-						System.out.println("Bâteau présent en "+i+","+j);
+						this.boutons[i][j].setText(""+grille.getGrille()[i][j]);
 					}
 				}
 			}

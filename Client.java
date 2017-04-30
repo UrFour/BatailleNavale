@@ -24,8 +24,7 @@ public class Client {
 			grille = grille.definitionBateau(grille.getJoueur());
 			{
 				oos.writeObject(grille);
-				sc.next();
-			}
+			} new Affichage(grille);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
