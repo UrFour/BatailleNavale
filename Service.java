@@ -21,24 +21,24 @@ public class Service extends Thread {
 	@Override
 	public void run() {
 		try {
-			InputStream is=socket.getInputStream();
+			InputStream is=this.socket.getInputStream();
 			InputStreamReader isr=new InputStreamReader(is);
 			BufferedReader br=new BufferedReader(isr);
-			OutputStream os=socket.getOutputStream();
+			OutputStream os=this.socket.getOutputStream();
 			ObjectInputStream ois = new ObjectInputStream(is);
 			PrintWriter pw=new PrintWriter(os, true);
-			pw.println(numClient);
-			System.out.println("Connexion du client n° "+numClient);
-			System.out.println("IP : "+socket.getRemoteSocketAddress());
+			pw.println(this.numClient);
+			System.out.println("Connexion du client n° "+this.numClient);
+			System.out.println("IP : "+this.socket.getRemoteSocketAddress());
 			while(true){
-				if (numClient == 1) {
-					grille1 = (Grille) ois.readObject();
+				if (this.numClient == 1) {
+					this.grille1 = (Grille) ois.readObject();
 					System.out.println("Grille du joueur 1 :");
-					grille1.afficherGrille();
-				} if (numClient == 2) {
-					grille2 = (Grille) ois.readObject();
+					this.grille1.afficherGrille();
+				} if (this.numClient == 2) {
+					this.grille2 = (Grille) ois.readObject();
 					System.out.println("Grille du joueur 2:" );
-					grille2.afficherGrille();
+					this.grille2.afficherGrille();
 				} if(!ServeurMultiThreads.fin) {
 				// déroulement du jeu
 				}
