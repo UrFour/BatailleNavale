@@ -4,17 +4,15 @@ public class Bateau implements Serializable{
 	private String nom;
 	private int taille;
 	private boolean[] etat;
+	private String[] coords;
 	private boolean estVertical;
-	private int ligne;
-	private int colonne;
 	
-	public Bateau(String nom, int taille, boolean[] etat, boolean estVertical, int ligne, int colonne) {
+	public Bateau(String nom, int taille, boolean[] etat, String[] coords, boolean estVertical) {
 		this.nom = nom;
 		this.taille = taille;
 		this.etat = etat;
+		this.coords = coords;
 		this.estVertical = estVertical;
-		this.ligne = ligne;
-		this.colonne = colonne;
 	}
 	
 	public int getTaille() {
@@ -25,9 +23,8 @@ public class Bateau implements Serializable{
 		return this.estVertical;
 	}
 	
-	public String getPosition() {
-		String toReturn = ""+this.ligne+""+this.colonne;
-		return toReturn;
+	public String[] getPosition() {
+		return this.coords;
 	}
 	
 	public boolean[] getEtat() {
@@ -60,7 +57,7 @@ public class Bateau implements Serializable{
 		String toReturn =  "Le bateau est un "+this.nom+" de taille "+this.taille+", placé";
 		if (this.estVertical) toReturn += " verticalement";
 		else toReturn += " horizontalement";
-		toReturn += ", avec "+this.casesTouchees()+" cases touchées. Il est situé en "+(char)(this.ligne + (int)'A' - 1)+this.colonne+".";
+		toReturn += ", avec "+this.casesTouchees()+" cases touchées. Il est situé en "+coords[0]+".";
 		return toReturn;
 	}
 

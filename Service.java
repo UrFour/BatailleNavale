@@ -30,16 +30,21 @@ public class Service extends Thread {
 			pw.println(this.numClient);
 			System.out.println("Connexion du client n° "+this.numClient);
 			System.out.println("IP : "+this.socket.getRemoteSocketAddress());
+			int compteur = 0;
 			while(true){
-				if (this.numClient == 1) {
-					this.grille1 = (Grille) ois.readObject();
-					System.out.println("Grille du joueur 1 :");
-					this.grille1.afficherGrille();
-				} if (this.numClient == 2) {
-					this.grille2 = (Grille) ois.readObject();
-					System.out.println("Grille du joueur 2:" );
-					this.grille2.afficherGrille();
-				} if(!ServeurMultiThreads.fin) {
+				while (compteur != 2) {
+					if (this.numClient == 1) {
+						this.grille1 = (Grille) ois.readObject();
+						System.out.println("Grille du joueur 1 :");
+						compteur++;
+						this.grille1.afficherGrille();
+					} if (this.numClient == 2) {
+						this.grille2 = (Grille) ois.readObject();
+						System.out.println("Grille du joueur 2:" );
+						this.grille2.afficherGrille();
+						compteur++;
+					}
+				} if(!ServeurMultiThreads.FIN) {
 				// déroulement du jeu
 				}
 			}

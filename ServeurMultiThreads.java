@@ -4,7 +4,8 @@ import java.net.Socket;
 
 public class ServeurMultiThreads extends Thread {
 	private int nbClients=0;
-	public static boolean fin;
+	public static boolean FIN;
+	public static boolean TOUR_JOUEUR_1;
 	@Override
 	public void run() {
 		try {

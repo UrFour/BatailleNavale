@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,7 +15,7 @@ public class Affichage extends JFrame {
 	
 	public Affichage(Grille grille) {
 		this.grille1 = grille;
-		this.grille2 = new Grille(10, new char[10][10], 5, new Bateau[2][5], 2);
+		this.grille2 = new Grille(10, new char[10][10], 5, new Bateau[5], 2);
 		this.fenetre.setTitle("Bataille navale");
 		this.fenetre.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		//this.fenetre.setResizable(false);
@@ -80,7 +79,7 @@ public class Affichage extends JFrame {
 			for (int i=0;i<10;i++) {
 				for (int j=0;j<10;j++) {
 					if (grille.getGrille()[i][j] == 'X') {
-						this.boutons[i][j].setText(""+grille.getGrille()[i][j]);
+						this.boutons[j][i].setText(""+grille.getGrille()[i][j]);
 					}
 				}
 			}
@@ -98,6 +97,7 @@ public class Affichage extends JFrame {
 		}
 		
 		public void actionPerformed(ActionEvent arg0) {
+			
 			System.out.println(""+((char)(this.ligne + (int)'A' - 1))+this.colonne+", grille n°"+this.numGrille);
 		}
 	}

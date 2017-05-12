@@ -20,11 +20,11 @@ public class Client {
 			ObjectOutputStream oos = new ObjectOutputStream(os);
 			PrintWriter pw= new PrintWriter(os, true);
 			Scanner sc=new Scanner(System.in);
-			Grille grille = new Grille(10, new char[10][10], 5, new Bateau[2][5], Integer.parseInt(br.readLine()));
+			Grille grille = new Grille(10, new char[10][10], 5, new Bateau[5], Integer.parseInt(br.readLine()));
 			grille = grille.definitionBateau(grille.getJoueur());
 			{
 				oos.writeObject(grille);
-			} new Affichage(grille);
+			} 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

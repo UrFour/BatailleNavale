@@ -7,10 +7,10 @@ public class Grille implements Serializable {
 	private int taille;
 	private char[][] grille;
 	private int nbrBateaux;
-	private Bateau[][] bateaux;
+	private Bateau[] bateaux;
 	private int joueur;
 	
-	public Grille(int taille, char[][] grille, int nbrBateaux, Bateau[][] bateaux, int joueur) {
+	public Grille(int taille, char[][] grille, int nbrBateaux, Bateau[] bateaux, int joueur) {
 		this.taille = taille;
 		this.grille = grille;
 		this.nbrBateaux = nbrBateaux;
@@ -21,7 +21,7 @@ public class Grille implements Serializable {
 	
 	public Grille definitionBateau(int joueur) {
 		Scanner sc = new Scanner(System.in);
-		Grille grille = new Grille(10, new char[10][10], 5, new Bateau[2][5], joueur);
+		Grille grille = new Grille(10, new char[10][10], 5, new Bateau[5], joueur);
 		// Définition de toutes les variables nécessaires
 		int l = 0; 
 		int c = 0; 
@@ -47,17 +47,25 @@ public class Grille implements Serializable {
 				} entreeCorrecte = false;
 				l = placement.charAt(0) - 'A' + 1; // conversion d'une lettre en chiffre (A donne 1, B donne 2, etc...)
 				if (placement.charAt(1) == '1' && placement.length() > 2) c=10; // cas particulier dans le cas où il y a plus de deux chiffres (pour le 10)
-				else {
-					c = Integer.parseInt(placement.replaceAll("\\D", "")); // permet d'extraire tous les chiffres d'une chaîne de caractères
-				} System.out.println("Voulez-vous le placer à l'horizontale ou à la verticale ? (H/V)"); // on choisit l'orientation du bateau
+				else c = Integer.parseInt(placement.replaceAll("\\D", "")); // permet d'extraire tous les chiffres d'une chaîne de caractères
+				System.out.println("Voulez-vous le placer à l'horizontale ou à la verticale ? (H/V)"); // on choisit l'orientation du bateau
 				placement = sc.nextLine();
 				if (placement.charAt(0) == 'H') {
 					estVertical = false;
 				} else {
 					estVertical = true;
 				} bateauPosable = grille.bateauPosable(l, c, i, estVertical);
-			} grille.bateaux[grille.joueur-1][i] = new Bateau(nomBateau(i+1), i+1, new boolean[i+1], estVertical, l-1, c-1);
-			grille.placerBateau(l, c, grille.bateaux[grille.joueur-1][i]);
+			} String[] coords = new String[i+1];
+			for (int j=0;j<coords.length;j++) {
+				if (estVertical) {
+					coords[j] = (char)(l + (int)'A' - 1)+""+(c+j);
+					System.out.println(coords[j]);
+				} else {
+					coords[j] = (char)(l+j + (int)'A' - 1)+""+c;
+					System.out.println(coords[j]);
+				}
+			} grille.bateaux[i] = new Bateau(nomBateau(i+1), i+1, new boolean[i+1], coords, estVertical);
+			grille.placerBateau(l, c, grille.bateaux[i]);
 			bateauPosable = false;
 		} return grille;
 	}
@@ -150,6 +158,18 @@ public class Grille implements Serializable {
 		 } System.out.println("+");
 	}
 	
+	/* public void gestionCoups() {
+		for (int i=0;i<10;i++) {
+			for (int j=0;j<10;j++) {
+				if (this.getGrille()[i][j] == 'X') {
+					
+				} else {
+					this.grille[i][j] = '.'; // le coup est raté
+				}
+			}
+		}
+	} */
+	
 	public int getJoueur() {
 		return this.joueur;
 	}
@@ -158,7 +178,7 @@ public class Grille implements Serializable {
 		return this.grille;
 	}
 	
-	public Bateau[][] getBateaux() {
+	public Bateau[] getBateaux() {
 		return this.bateaux;
 	}
 	
