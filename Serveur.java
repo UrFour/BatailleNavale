@@ -1,35 +1,36 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Random;
 
-public class Serveur {
-
-	public static void main(String[] args) throws ClassNotFoundException {
+public class Serveur extends Thread {
+	private int nbClients=0;
+	public static boolean FIN;
+	public static boolean TOUR_JOUEUR;
+	public static int TOUR;
+	public static int COMPTEUR;
+	public static Grille grille1;
+	public static Grille grille2;
+	public static Service[] clients;
+	@Override
+	public void run() {
 		try {
-			ServerSocket ss=new ServerSocket(123);
-			System.out.println("J'attends une connexion");
-			Socket s=ss.accept();
-			InputStream is=s.getInputStream();
-			InputStreamReader isr=new InputStreamReader(is);
-			BufferedReader br=new BufferedReader(isr);
-			OutputStream os=s.getOutputStream();
-			ObjectInputStream ois = new ObjectInputStream(is);
-			PrintWriter pw=new PrintWriter(os, true);
-			Grille grille1;
-			while (true) {
-				grille1 = (Grille) ois.readObject();
-				grille1.afficherGrille();
+			COMPTEUR = 0;
+			TOUR = 1;
+			ServerSocket ss=new ServerSocket(27190);
+			System.out.println("Le serveur est lancé sur le port 27190.");
+			System.out.println("En attente de connexions...");
+			while(!FIN){
+				Socket s=ss.accept();
+				nbClients++;
+				new Service(s,nbClients).start();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
-
+		}
+	}
+	public static void main(String[] args) {
+		new Serveur().start();
 	}
 
 }

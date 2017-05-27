@@ -1,5 +1,3 @@
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Scanner;
 
@@ -46,8 +44,8 @@ public class Grille implements Serializable {
 					}
 				} entreeCorrecte = false;
 				l = placement.charAt(0) - 'A' + 1; // conversion d'une lettre en chiffre (A donne 1, B donne 2, etc...)
-				if (placement.charAt(1) == '1' && placement.length() > 2) c=10; // cas particulier dans le cas où il y a plus de deux chiffres (pour le 10)
-				else c = Integer.parseInt(placement.replaceAll("\\D", "")); // permet d'extraire tous les chiffres d'une chaîne de caractères
+				//if (placement.charAt(1) == '1' && placement.length() > 2) c=10; // cas particulier dans le cas où il y a plus de deux chiffres (pour le 10)
+				c = Integer.parseInt(placement.replaceAll("\\D", "")); // permet d'extraire tous les chiffres d'une chaîne de caractères
 				System.out.println("Voulez-vous le placer à l'horizontale ou à la verticale ? (H/V)"); // on choisit l'orientation du bateau
 				placement = sc.nextLine();
 				if (placement.charAt(0) == 'H') {
@@ -58,11 +56,11 @@ public class Grille implements Serializable {
 			} String[] coords = new String[i+1];
 			for (int j=0;j<coords.length;j++) {
 				if (estVertical) {
-					coords[j] = (char)(l + (int)'A' - 1)+""+(c+j);
-					System.out.println(coords[j]);
+					coords[j] = intToChar(l)+""+(c+j);
+					//System.out.println(coords[j]);
 				} else {
-					coords[j] = (char)(l+j + (int)'A' - 1)+""+c;
-					System.out.println(coords[j]);
+					coords[j] = intToChar(l+j)+""+c;
+					//System.out.println(coords[j]);
 				}
 			} grille.bateaux[i] = new Bateau(nomBateau(i+1), i+1, new boolean[i+1], coords, estVertical);
 			grille.placerBateau(l, c, grille.bateaux[i]);
@@ -145,7 +143,7 @@ public class Grille implements Serializable {
 				 System.out.print(i+1+"  ");
 			 } System.out.print("|");
 			 for (int j=0;j<this.grille[0].length;j++) {
-				 if (this.grille[i][j] == 'X' || this.grille[i][j] == '.') {
+				 if (this.grille[i][j] == 'X' || this.grille[i][j] == '.' || this.grille[i][j] == '*') {
 					 System.out.print(this.grille[i][j]);
 				 } else {
 					 System.out.print(" ");
@@ -158,17 +156,48 @@ public class Grille implements Serializable {
 		 } System.out.println("+");
 	}
 	
-	/* public void gestionCoups() {
-		for (int i=0;i<10;i++) {
-			for (int j=0;j<10;j++) {
-				if (this.getGrille()[i][j] == 'X') {
-					
+	public void gestionCoups(Grille grille) {
+		Scanner sc = new Scanner(System.in);
+		boolean entreeCorrecte = false; boolean touche = false;
+		String coup = "";
+		int indice = 0;
+		while (!entreeCorrecte) {
+			System.out.println("Quelle case voulez-vous attaquer ?");
+			coup = sc.nextLine();
+			if (((int)coup.charAt(0)) <= (int)'J' && ((int)coup.charAt(0) >= (int)'A')) { // On vérifie que l'utilisateur entre bien une lettre entre A et J
+				if (((int)coup.charAt(1)) <= (int)'9' && ((int)coup.charAt(1) >= (int)'1')) { // et un nombre entre 0 et 10
+					entreeCorrecte = true;
 				} else {
-					this.grille[i][j] = '.'; // le coup est raté
+					System.out.println("Erreur de saisie. L'entrée doit être de type [LETTRE][chiffre], exemple : B9.");
 				}
 			}
+		} for (int i=0;i<5;i++) {
+			for (int j=0;j<this.bateaux[i].getTaille();j++) {
+				if (coup.charAt(0) == this.bateaux[i].getPosition()[j].charAt(0) && (coup.charAt(1) == this.bateaux[i].getPosition()[j].charAt(1))) {
+					this.bateaux[i].setEtat(j);
+					touche = true;
+					indice = i;
+				}
+			}
+		} if (touche) {
+			this.grille[coup.charAt(0)- 'A'][Integer.parseInt(coup.replaceAll("\\D", ""))-1] = '*';
+			System.out.println("Touché !");
+		} else if (touche && this.bateaux[indice].bateauCoule()) {
+			System.out.println("Touché coulé !");
+		} else {
+			this.grille[coup.charAt(0)- 'A'][Integer.parseInt(coup.replaceAll("\\D", ""))-1] = '.';
+			System.out.println("Raté !");
 		}
-	} */
+	}
+	
+	public boolean jeuTermine() {
+		boolean jeuTermine = true;
+		for (int i=0;i<this.bateaux.length;i++) {
+			if (!this.bateaux[i].bateauCoule()) {
+				jeuTermine = false;
+			}
+		} return jeuTermine;
+	}
 	
 	public int getJoueur() {
 		return this.joueur;
@@ -180,9 +209,5 @@ public class Grille implements Serializable {
 	
 	public Bateau[] getBateaux() {
 		return this.bateaux;
-	}
-	
-	public void setGrille(int ligne, int colonne, char etat) {
-		this.grille[ligne][colonne] = etat;
 	}
 }
