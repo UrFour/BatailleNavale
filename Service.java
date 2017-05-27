@@ -42,7 +42,7 @@ public class Service extends Thread{
 					System.out.println("Les deux grilles ont été reçues. Début du jeu.");
 					while (!Serveur.FIN) {
 					oos.writeObject(Serveur.TOUR);
-					if (Serveur.TOUR == 1) {
+					if (Serveur.TOUR == 1 && this.numClient == 1) {
 						System.out.println("Début du tour du joueur 1");
 						oos.writeObject(Serveur.grille2);
 						System.out.println("Grille envoyée au joueur 1. En attente du joueur 1...");
@@ -54,7 +54,7 @@ public class Service extends Thread{
 						System.out.println("Fin du jeu :"+Serveur.FIN);
 						Serveur.TOUR = 2;
 						oos.writeObject(Serveur.FIN);
-					} else if (Serveur.TOUR == 2) {
+					} else if (Serveur.TOUR == 2 && this.numClient == 2) {
 						System.out.println("Début du tour du joueur 2");
 						oos.writeObject(Serveur.grille1);
 						System.out.println("Grille envoyée au joueur 2. En attente du joueur 2...");
