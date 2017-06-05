@@ -15,7 +15,7 @@ public class Affichage extends JFrame {
 	
 	public Affichage(Grille grille) {
 		this.grille1 = grille;
-		this.grille2 = new Grille(10, new char[10][10], 5, new Bateau[5], 2);
+		this.grille2 = new Grille(10, new char[10][10], new char[10][10], 5, new Bateau[5], 2);
 		this.fenetre.setTitle("Bataille navale");
 		this.fenetre.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		//this.fenetre.setResizable(false);

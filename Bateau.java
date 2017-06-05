@@ -1,6 +1,7 @@
 import java.io.Serializable;
 
 public class Bateau implements Serializable{
+	private static final long serialVersionUID = 5077736288091192772L;
 	private String nom;
 	private int taille;
 	private boolean[] etat;

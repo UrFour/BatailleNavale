@@ -2,15 +2,17 @@ import java.io.Serializable;
 import java.util.Scanner;
 
 public class Grille implements Serializable {
-	private int taille;
+
+	private static final long serialVersionUID = -948087220809624571L;
 	private char[][] grille;
+	private char[][] affichageTirsAdverses;
 	private int nbrBateaux;
 	private Bateau[] bateaux;
 	private int joueur;
 	
-	public Grille(int taille, char[][] grille, int nbrBateaux, Bateau[] bateaux, int joueur) {
-		this.taille = taille;
+	public Grille(int taille, char[][] grille, char[][] affichageTirsAdverses, int nbrBateaux, Bateau[] bateaux, int joueur) {
 		this.grille = grille;
+		this.affichageTirsAdverses = affichageTirsAdverses;
 		this.nbrBateaux = nbrBateaux;
 		this.bateaux = bateaux;
 		this.joueur = joueur;
@@ -19,7 +21,7 @@ public class Grille implements Serializable {
 	
 	public Grille definitionBateau(int joueur) {
 		Scanner sc = new Scanner(System.in);
-		Grille grille = new Grille(10, new char[10][10], 5, new Bateau[5], joueur);
+		Grille grille = new Grille(10, new char[10][10], new char[10][10], 5, new Bateau[5], joueur);
 		// Définition de toutes les variables nécessaires
 		int l = 0; 
 		int c = 0; 
@@ -37,17 +39,26 @@ public class Grille implements Serializable {
 				while (!entreeCorrecte) {
 					System.out.println("Où placer votre "+nomBateau(i+1)+" ? ("+(i+1)+" cases) :");
 					placement = sc.nextLine();
-					if (((int)placement.charAt(0)) <= (int)'J' && ((int)placement.charAt(0) >= (int)'A')) { // On vérifie que l'utilisateur entre bien une lettre entre A et J
+					if ((((placement.length() == 2)) || ((placement.length() == 3) && (placement.charAt(1) == '1') && (placement.charAt(2) == '0'))) && ((int)placement.charAt(0)) <= (int)'J' && ((int)placement.charAt(0) >= (int)'A')) { // On vérifie que l'utilisateur entre bien une lettre entre A et J
 						if (((int)placement.charAt(1)) <= (int)'9' && ((int)placement.charAt(1) >= (int)'1')) { // et un nombre entre 0 et 10
 							entreeCorrecte = true;
 						}
+					} else {
+						System.out.println("Erreur de saisie. L'entrée doit être de type [LETTRE][chiffre], exemple : B9.");
 					}
 				} entreeCorrecte = false;
 				l = placement.charAt(0) - 'A' + 1; // conversion d'une lettre en chiffre (A donne 1, B donne 2, etc...)
 				//if (placement.charAt(1) == '1' && placement.length() > 2) c=10; // cas particulier dans le cas où il y a plus de deux chiffres (pour le 10)
 				c = Integer.parseInt(placement.replaceAll("\\D", "")); // permet d'extraire tous les chiffres d'une chaîne de caractères
-				System.out.println("Voulez-vous le placer à l'horizontale ou à la verticale ? (H/V)"); // on choisit l'orientation du bateau
-				placement = sc.nextLine();
+				while (!entreeCorrecte) {
+					System.out.println("Voulez-vous le placer à l'horizontale ou à la verticale ? (H/V)"); // on choisit l'orientation du bateau
+					placement = sc.nextLine();
+					if (placement.charAt(0) == 'H' || placement.charAt(0) == 'V') {
+						entreeCorrecte = true;
+					} else {
+						System.out.println("Erreur de saisie. Vous devez entrer H (pour horizontal) ou V (pour vertical).");
+					}
+				} entreeCorrecte = false;
 				if (placement.charAt(0) == 'H') {
 					estVertical = false;
 				} else {
@@ -119,7 +130,7 @@ public class Grille implements Serializable {
 				this.grille[c-1][i] = 'X';
 			}
 		} System.out.println("Emplacement des bateaux actuels :");
-		this.afficherGrille();
+		this.afficherGrille(this.grille);
 	}
 	
 	public String intToChar(int valeur) {
@@ -127,23 +138,23 @@ public class Grille implements Serializable {
 		return toReturn;
 	}
 	
-	public void afficherGrille() {
+	public void afficherGrille(char[][] grille) {
 		System.out.print("    ");
-		for (int i=1;i<=this.grille.length;i++) {
+		for (int i=1;i<=grille.length;i++) {
 			System.out.print(intToChar(i));
 		} System.out.println();
 		System.out.print("   +");
-		for (int j=0;j<this.grille[0].length;j++) {
+		for (int j=0;j<grille[0].length;j++) {
 			System.out.print("-");
 		} System.out.println("+");
-		for (int i=0;i<this.grille.length;i++) {
+		for (int i=0;i<grille.length;i++) {
 			 if (i == 9) {
 				 System.out.print(i+1+" ");
 			 } else {
 				 System.out.print(i+1+"  ");
 			 } System.out.print("|");
-			 for (int j=0;j<this.grille[0].length;j++) {
-				 if (this.grille[i][j] == 'X' || this.grille[i][j] == '.' || this.grille[i][j] == '*') {
+			 for (int j=0;j<grille[0].length;j++) {
+				 if (grille[i][j] == 'X' || grille[i][j] == '.' || grille[i][j] == '*') {
 					 System.out.print(this.grille[i][j]);
 				 } else {
 					 System.out.print(" ");
@@ -164,12 +175,18 @@ public class Grille implements Serializable {
 		while (!entreeCorrecte) {
 			System.out.println("Quelle case voulez-vous attaquer ?");
 			coup = sc.nextLine();
-			if (((int)coup.charAt(0)) <= (int)'J' && ((int)coup.charAt(0) >= (int)'A')) { // On vérifie que l'utilisateur entre bien une lettre entre A et J
+			if ((((coup.length() == 2) || ((coup.length() == 3) && (coup.charAt(1) == '1') && (coup.charAt(2)) == '0'))) && ((int)coup.charAt(0)) <= (int)'J' && ((int)coup.charAt(0) >= (int)'A')) { // On vérifie que l'utilisateur entre bien une lettre entre A et J
 				if (((int)coup.charAt(1)) <= (int)'9' && ((int)coup.charAt(1) >= (int)'1')) { // et un nombre entre 0 et 10
-					entreeCorrecte = true;
+					if (this.affichageTirsAdverses[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] != '.' && this.affichageTirsAdverses[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] != '*') {
+						entreeCorrecte = true;
+					} else {
+						System.out.println("Erreur. Vous avez déjà tiré sur cette case, merci d'en sélectionner une autre.");
+					}
 				} else {
 					System.out.println("Erreur de saisie. L'entrée doit être de type [LETTRE][chiffre], exemple : B9.");
 				}
+			} else {
+				System.out.println("Erreur de saisie. L'entrée doit être de type [LETTRE][chiffre], exemple : B9.");
 			}
 		} for (int i=0;i<5;i++) {
 			for (int j=0;j<this.bateaux[i].getTaille();j++) {
@@ -179,15 +196,20 @@ public class Grille implements Serializable {
 					indice = i;
 				}
 			}
-		} if (touche) {
-			this.grille[coup.charAt(0)- 'A'][Integer.parseInt(coup.replaceAll("\\D", ""))-1] = '*';
-			System.out.println("Touché !");
-		} else if (touche && this.bateaux[indice].bateauCoule()) {
+		} if (touche && this.bateaux[indice].bateauCoule()) {
+			this.grille[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] = '*';
+			this.affichageTirsAdverses[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] = '*';
 			System.out.println("Touché coulé !");
+		} else if (touche) {
+			this.grille[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] = '*';
+			this.affichageTirsAdverses[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] = '*';
+			System.out.println("Touché !");
 		} else {
-			this.grille[coup.charAt(0)- 'A'][Integer.parseInt(coup.replaceAll("\\D", ""))-1] = '.';
+			this.grille[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] = '.';
+			this.affichageTirsAdverses[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] = '.';
 			System.out.println("Raté !");
-		}
+		} System.out.println("Etat de la grille adverse : ");
+		this.afficherGrille(this.affichageTirsAdverses);
 	}
 	
 	public boolean jeuTermine() {
