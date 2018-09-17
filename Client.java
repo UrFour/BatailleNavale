@@ -30,7 +30,7 @@ public class Client {
 			int tour; boolean fin = false; int joueur = (int)ois.readObject(); int joueurGagnant;
 			Grille grille = new Grille(10, new char[10][10], new char[10][10], 5, new Bateau[5], joueur); Grille grilleAdverse;
 			
-			System.out.println("Bienvenue sur la Bataille navale créé par le meilleur groupe d'info de la D13 (rpz).\n");
+			System.out.println("Bienvenue sur la Bataille navale créé par Mountasir Nassime.\n");
 			System.out.println("Note : pour entrez les coordonnées de vos bateaux, l'entrée doit être de type [LETTRE][chiffre], exemple : B9.");
 			System.out.println("Le jeu va maintenant commencer...\n");
 			Thread.sleep(2000);
