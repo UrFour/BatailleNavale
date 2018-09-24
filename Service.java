@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-//import java.net.SocketException;
+import java.net.SocketException;
 
 public class Service extends Thread{
 	private Socket socket;
@@ -30,12 +30,15 @@ public class Service extends Thread{
 			System.out.println("Connexion du client n° "+this.numClient);
 			System.out.println("IP : "+this.socket.getRemoteSocketAddress());
 			while (true) {
-				if (Serveur.FIN) {
+				if (Serveur.FIN && !Serveur.refairePartie) {
 					this.interrupt();
 				} else {
 					Thread.sleep(1000);
 				}
 			}
+		} catch (SocketException e) {
+			System.out.println("Le joueur n°"+this.numClient+" s'est déconnecté du serveur.");
+			this.interrupt();
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -46,8 +49,7 @@ public class Service extends Thread{
 			try {
 				this.oos.writeObject(objet);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
 			}
 		}
 	}
@@ -59,8 +61,7 @@ public class Service extends Thread{
 				try {
 					grille = (Grille) this.ois.readObject();
 				} catch (IOException | ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+
 				}
 			}
 		} return grille;

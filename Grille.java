@@ -1,9 +1,9 @@
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Scanner;
 
 public class Grille implements Serializable {
 
-	private static final long serialVersionUID = -948087220809624571L;
 	private char[][] grille;
 	private char[][] affichageTirsAdverses;
 	private int nbrBateaux;
@@ -22,38 +22,37 @@ public class Grille implements Serializable {
 	public Grille definitionBateau(int joueur) {
 		Scanner sc = new Scanner(System.in);
 		Grille grille = new Grille(10, new char[10][10], new char[10][10], 5, new Bateau[5], joueur);
-		// Définition de toutes les variables nécessaires
+		// D?finition de toutes les variables n?cessaires
 		int l = 0;
 		int c = 0;
 		boolean entreeCorrecte = false;
 		boolean bateauPosable = false;
 		boolean estVertical = false;
 		String placement = "";
-
-		System.out.println("Définition des bateaux du joueur "+grille.joueur+".");
+		System.out.println("D?finition des bateaux du joueur "+grille.joueur+".");
 		/* Boucle pour initialiser les 5 bateaux du joueur (on peut techniquement en rajouter plus mais il faut ajouter
-		 * le nom des bateaux correspondants aux différentes tailles dans la fonction en-dessous
+		 * le nom des bateaux correspondants aux diff?rentes tailles dans la fonction en-dessous
 		 */
 		for (int i=0;i<nbrBateaux;i++) {
-			while (!bateauPosable) { // Il faut que le bateau ne dépasse pas la grille et qu'il n'y ait pas de bateau sur la case
+			while (!bateauPosable) { // Il faut que le b?teau ne d?passe pas la grille et qu'il n'y ait pas de bateau sur la case
 				while (!entreeCorrecte) {
-					System.out.println("Où placer votre "+nomBateau(i+1)+" ? ("+(i+1)+" cases) :");
+					System.out.println("O? placer votre "+nomBateau(i+1)+" ? ("+(i+1)+" cases) :");
 					placement = sc.nextLine();
-					if ((((placement.length() == 2)) || ((placement.length() == 3) && (placement.charAt(1) == '1') && (placement.charAt(2) == '0'))) && ((int)placement.charAt(0)) <= (int)'J' && ((int)placement.charAt(0) >= (int)'A')) { // On vérifie que l'utilisateur entre bien une lettre entre A et J
+					if ((((placement.length() == 2)) || ((placement.length() == 3) && (placement.charAt(1) == '1') && (placement.charAt(2) == '0'))) && ((int)placement.charAt(0)) <= (int)'J' && ((int)placement.charAt(0) >= (int)'A')) { // On v?rifie que l'utilisateur entre bien une lettre entre A et J
 						if (((int)placement.charAt(1)) <= (int)'9' && ((int)placement.charAt(1) >= (int)'1')) { // et un nombre entre 0 et 10
 							entreeCorrecte = true;
 						}
 					} else {
-						System.out.println("Erreur de saisie. L'entrée doit être de type [LETTRE][chiffre], exemple : B9.");
+						System.out.println("Erreur de saisie. L'entr?e doit ?tre de type [LETTRE][chiffre], exemple : B9.");
 					}
 				} entreeCorrecte = false;
 				l = placement.charAt(0) - 'A' + 1; // conversion d'une lettre en chiffre (A donne 1, B donne 2, etc...)
-				//if (placement.charAt(1) == '1' && placement.length() > 2) c=10; // cas particulier dans le cas où il y a plus de deux chiffres (pour le 10)
-				c = Integer.parseInt(placement.replaceAll("\\D", "")); // permet d'extraire tous les chiffres d'une chaîne de caractères
+				//if (placement.charAt(1) == '1' && placement.length() > 2) c=10; // cas particulier dans le cas o? il y a plus de deux chiffres (pour le 10)
+				c = Integer.parseInt(placement.replaceAll("\\D", "")); // permet d'extraire tous les chiffres d'une cha?ne de caract?res
 				while (!entreeCorrecte) {
-					System.out.println("Voulez-vous le placer à l'horizontale ou à la verticale ? (H/V)"); // on choisit l'orientation du bateau
+					System.out.println("Voulez-vous le placer ? l'horizontale ou ? la verticale ? (H/V)"); // on choisit l'orientation du bateau
 					placement = sc.nextLine();
-					if (placement.charAt(0) == 'H' || placement.charAt(0) == 'V') {
+					if ((placement.length() > 0) && ((placement.charAt(0) == 'H' || placement.charAt(0) == 'V'))) {
 						entreeCorrecte = true;
 					} else {
 						System.out.println("Erreur de saisie. Vous devez entrer H (pour horizontal) ou V (pour vertical).");
@@ -104,19 +103,21 @@ public class Grille implements Serializable {
 		boolean bateauPosable = true;
 		if ((l+taille>10 && !estVertical) || (c+taille>10 && estVertical)) {
 			bateauPosable = false;
-		} if (estVertical) {
-			for (int i=(c-1);i<taille+(c-1);i++) {
-				if (grille[i][l-1] == 'X') {
-					bateauPosable = false;
-				}
-			}
 		} else {
-			for (int i=(l-1);i<taille+(l-1);i++) {
-				if (grille[c-1][i] == 'X') {
-					bateauPosable = false;
+			if (estVertical) {
+				for (int i=(c-1);i<taille+(c-1);i++) {
+					if (grille[i][l-1] == 'X') {
+						bateauPosable = false;
+					}
+				}
+			} else {
+				for (int i=(l-1);i<taille+(l-1);i++) {
+					if (grille[c-1][i] == 'X') {
+						bateauPosable = false;
+					}
 				}
 			}
-		} if (!bateauPosable) System.out.println("Erreur ! Un bateau est déjà présent sur cette case ou le bateau dépasse de la grille.");
+		} if (!bateauPosable) System.out.println("Erreur ! Un b?teau est d?j? pr?sent sur cette case ou le bateau d?passe de la grille.");
 		return bateauPosable;
 	}
 
@@ -175,15 +176,15 @@ public class Grille implements Serializable {
 		while (!entreeCorrecte) {
 			System.out.println("Quelle case voulez-vous attaquer ?");
 			coup = sc.nextLine();
-			if ((((coup.length() == 2) || ((coup.length() == 3) && (coup.charAt(1) == '1') && (coup.charAt(2)) == '0'))) && ((int)coup.charAt(0)) <= (int)'J' && ((int)coup.charAt(0) >= (int)'A')) { // On vérifie que l'utilisateur entre bien une lettre entre A et J
+			if ((((coup.length() == 2) || ((coup.length() == 3) && (coup.charAt(1) == '1') && (coup.charAt(2)) == '0'))) && ((int)coup.charAt(0)) <= (int)'J' && ((int)coup.charAt(0) >= (int)'A')) { // On v?rifie que l'utilisateur entre bien une lettre entre A et J
 				if (((int)coup.charAt(1)) <= (int)'9' && ((int)coup.charAt(1) >= (int)'1')) { // et un nombre entre 0 et 10
 					if (this.affichageTirsAdverses[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] != '.' && this.affichageTirsAdverses[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] != '*') {
 						entreeCorrecte = true;
 					} else {
-						System.out.println("Erreur. Vous avez déjà tiré sur cette case, merci d'en sélectionner une autre.");
+						System.out.println("Erreur. Vous avez d?j? tir? sur cette case, merci d'en s?lectionner une autre.");
 					}
 				} else {
-					System.out.println("Erreur de saisie. L'entrée doit être de type [LETTRE][chiffre], exemple : B9.");
+					System.out.println("Erreur de saisie. L'entr?e doit ?tre de type [LETTRE][chiffre], exemple : B9.");
 				}
 			} else {
 				System.out.println("Erreur de saisie. L'entrée doit être de type [LETTRE][chiffre], exemple : B9.");
@@ -199,15 +200,15 @@ public class Grille implements Serializable {
 		} if (touche && this.bateaux[indice].bateauCoule()) {
 			this.grille[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] = '*';
 			this.affichageTirsAdverses[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] = '*';
-			System.out.println("Touché coulé !");
+			System.out.println("Touch? coul? !");
 		} else if (touche) {
 			this.grille[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] = '*';
 			this.affichageTirsAdverses[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] = '*';
-			System.out.println("Touché !");
+			System.out.println("Touch? !");
 		} else {
 			this.grille[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] = '.';
 			this.affichageTirsAdverses[Integer.parseInt(coup.replaceAll("\\D", ""))-1][coup.charAt(0)- 'A'] = '.';
-			System.out.println("Raté !");
+			System.out.println("Rat? !");
 		} System.out.println("Etat de la grille adverse : ");
 		this.afficherGrille(this.affichageTirsAdverses);
 	}
@@ -231,5 +232,14 @@ public class Grille implements Serializable {
 
 	public Bateau[] getBateaux() {
 		return this.bateaux;
+	}
+
+	public static void effacerEcran(){
+	    try {
+	        if (System.getProperty("os.name").contains("Windows"))
+	            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+	        else
+	            Runtime.getRuntime().exec("clear");
+	    } catch (IOException | InterruptedException e) {}
 	}
 }
