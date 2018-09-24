@@ -12,16 +12,16 @@ public class Affichage extends JFrame {
 	private JFrame fenetre = new JFrame();
 	private Grille grille1;
 	private Grille grille2;
-	
+
 	public Affichage(Grille grille) {
 		this.grille1 = grille;
 		this.grille2 = new Grille(10, new char[10][10], new char[10][10], 5, new Bateau[5], 2);
 		this.fenetre.setTitle("Bataille navale");
 		this.fenetre.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		//this.fenetre.setResizable(false);
-		
+
 		Onglet[] grilles = {new Onglet(1, this.grille1), new Onglet(2, this.grille2)};
-		
+
 		this.onglet.add("Votre grille", grilles[0]);
 		this.onglet.add("Grille adverse", grilles[1]);
 		this.fenetre.getContentPane().add(this.onglet);
@@ -30,9 +30,9 @@ public class Affichage extends JFrame {
 		this.fenetre.setLocationRelativeTo(null);
 		this.fenetre.setVisible(true);
 	}
-	
-	
-	
+
+
+
 	class Onglet extends JPanel {
 		private JButton[][] boutons;
 		private JLabel[] lignes;
@@ -45,7 +45,7 @@ public class Affichage extends JFrame {
 			this.lignes = new JLabel[11];
 			this.colonnes = new JLabel[11];
 			this.grille = grille;
-			
+
 			this.setLayout(null);
 			for (int i=0;i<10;i++) {
 				this.lignes[i] = new JLabel(""+(char)(i + (int)'A' - 1));
@@ -74,7 +74,7 @@ public class Affichage extends JFrame {
 			this.add(label);
 			this.update();
 		}
-		
+
 		public void update() {
 			for (int i=0;i<10;i++) {
 				for (int j=0;j<10;j++) {
@@ -85,7 +85,7 @@ public class Affichage extends JFrame {
 			}
 		}
 	}
-	
+
 	private final class GrilleListener implements ActionListener {
 		private final int ligne;
 		private final int colonne;
@@ -95,10 +95,10 @@ public class Affichage extends JFrame {
 			this.colonne = c;
 			this.numGrille = n;
 		}
-		
+
 		public void actionPerformed(ActionEvent arg0) {
-			
-			System.out.println(""+((char)(this.ligne + (int)'A' - 1))+this.colonne+", grille n°"+this.numGrille);
+
+			System.out.println(""+((char)(this.ligne + (int)'A' - 1))+this.colonne+", grille nÂ°"+this.numGrille);
 		}
 	}
 }

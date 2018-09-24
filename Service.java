@@ -22,45 +22,12 @@ public class Service extends Thread{
 			e.printStackTrace();
 		}
 	}
-	
-/*	@Override
-	public void run() {
-		try {
-			oos.writeObject(this.numClient);
-			System.out.println("Connexion du client n° "+this.numClient);
-			System.out.println("IP : "+this.socket.getRemoteSocketAddress());
-			while (true) {
-				while(Serveur.COMPTEUR < 2) {
-					if (this.numClient == 1 && Serveur.COMPTEUR < 2) {
-						Serveur.grille1 = this.readGrille();
-						System.out.println("Grille du joueur 1 :");
-						Serveur.COMPTEUR++;
-						Serveur.grille1.afficherGrille();
-					} else if (this.numClient == 2 && Serveur.COMPTEUR < 2) {
-						Serveur.grille2 = this.readGrille();
-						System.out.println("Grille du joueur 2 :");
-						Serveur.COMPTEUR++;
-						Serveur.grille2.afficherGrille();
-					}
-				} if (Serveur.COMPTEUR == 2) {
-					if (Serveur.FIN) {
-						System.out.println("Fin du jeu !");
-						this.interrupt();
-					}
-				}
-			}
-		} catch (SocketException e) {
-			System.out.println("Le joueur n°"+this.numClient+" s'est déconnecté du serveur.");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	} */
-	
+
 	@Override
 	public void run() {
 		try {
 			oos.writeObject(this.numClient);
-			System.out.println("Connexion du client n° "+this.numClient);
+			System.out.println("Connexion du client nÂ° "+this.numClient);
 			System.out.println("IP : "+this.socket.getRemoteSocketAddress());
 			while (true) {
 				if (Serveur.FIN) {
@@ -73,7 +40,7 @@ public class Service extends Thread{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void writeSynchronizedObject (Object objet) {
 		synchronized (this.oos) {
 			try {
@@ -84,7 +51,7 @@ public class Service extends Thread{
 			}
 		}
 	}
-	
+
 	public Grille readGrille() {
 		Grille grille = new Grille(10, new char[10][10], new char[10][10], 5, new Bateau[5], 0);
 		synchronized (this.ois) {
@@ -95,10 +62,10 @@ public class Service extends Thread{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			} 
+			}
 		} return grille;
 	}
-	
+
 	public int getNumClient() {
 		return this.numClient;
 	}
